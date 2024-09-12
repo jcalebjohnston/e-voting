@@ -1,0 +1,51 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 600px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+.card {
+    margin: 10px 0;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.vote-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 5px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.vote-card.selected {
+    background-color: #9c3636;
+    border-color: #007bff;
+}
+
+.vote-card img {
+    width: 100%;
+}
+
+.vote-card .card-body {
+    text-align: center;
+}
