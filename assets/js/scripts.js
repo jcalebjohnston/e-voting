@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const page1 = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const page3 = document.getElementById('page3');
-
+    const page4 = document.getElementById('page4');
 
     const badgeInput = document.getElementById('badgeNumber');
     const phoneInput = document.getElementById('phone');
@@ -11,13 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const otpInput = document.getElementById('otp');
     const verifyOtpBtn = document.getElementById('verifyOtp');
     const submitVoteBtn = document.getElementById('submitVote');
+    const resultsChart = document.getElementById('resultsChart').getContext('2d');
     let selectedVote = null;
 
     badgeInput.addEventListener('blur', () => {
         const badgeNumber = badgeInput.value;
 
         if (badgeNumber.length === 6 && /^0/.test(badgeNumber)) {
-            fetch('fetch_user.php', {
+            fetch('helpers/fetch_user.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -47,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneNumber = phoneInput.value;
 
         if (badgeNumber && !userDetails.classList.contains('hidden')) {
-            fetch('send_otp.php', {
+            verifyBadgeBtn.disabled = true;
+
+            fetch('helpers/send_otp.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -70,13 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Error:', error);
                     Swal.fire('Error', 'An unexpected error occurred.', 'error');
                 });
-        } 
+        }
     });
 
     verifyOtpBtn.addEventListener('click', () => {
+        verifyOtpBtn.disabled = true;
         const otpValue = otpInput.value;
 
-        fetch('verify_otp.php', {
+        fetch('helpers/verify_otp.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -93,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 2000);
                 } else {
                     Swal.fire('Error', 'Invalid OTP!', 'error');
+                    verifyOtpBtn.disabled = false;
                 }
             })
             .catch(error => {
@@ -113,10 +118,12 @@ document.addEventListener('DOMContentLoaded', () => {
     submitVoteBtn.addEventListener('click', () => {
         if (!selectedVote) {
             Swal.fire('Error', 'Please select an option to vote.', 'error');
+            submitVoteBtn.disabled = false;
             return;
         }
+        submitVoteBtn.disabled = true;
 
-        fetch('submit_vote.php', {
+        fetch('helpers/submit_vote.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -131,6 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     Swal.fire('Thank you!', 'Your vote has been submitted.', 'success');
                     setTimeout(() => {
                         page3.classList.remove('active');
+                        page4.classList.add('active');
+                        loadChart();
                     }, 2000);
                 } else {
                     Swal.fire('Error', data.message, 'error');
@@ -140,6 +149,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error:', error);
                 Swal.fire('Error', 'An unexpected error occurred.', 'error');
             });
+    });
+
+    function loadChart() {
+        fetch('helpers/get_results.php') // Fetch vote counts from backend
+            .then(response => response.json())
+            .then(data => {
+                const resultsData = {
+                    labels: ['Melcom', 'Non-stick Pans', 'China Mall', 'Ice Chest'],
+                    datasets: [{
+                        data: [data.award1, data.award2, data.award3, data.award4], // Dynamic vote counts
+                        backgroundColor: ['#f20505', '#0529f2', '#0a820a', '#a65e16'],
+                    }]
+                };
+
+                new Chart(resultsChart, {
+                    type: 'doughnut',
+                    data: resultsData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading results:', error);
+            });
+    }
+
+    // Handle finish button
+    const finishBtn = document.getElementById('finishBtn');
+    finishBtn.addEventListener('click', () => {
+        window.location.href = 'helpers/kill.php';
     });
 
     page1.classList.add('active');

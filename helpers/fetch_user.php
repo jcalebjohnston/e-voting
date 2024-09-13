@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../config/db.php';
 session_start();
 
 if (isset($_POST['badgeNumber'])) {
@@ -27,6 +27,7 @@ if (isset($_POST['badgeNumber'])) {
         $_SESSION['safety_section'] = $user['safety_section'];
         $_SESSION['department'] = $user['department'];
         $_SESSION['phone'] = $user['phone'];
+        $_SESSION['fetched_user'] = true;
 
         echo json_encode(['status' => 'success', 'user' => $user]);
     } else {

@@ -1,7 +1,19 @@
 <?php
 session_start();
 
-$arkesel_api_key = 'YOUR_SMS_API_KEY';
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+if (!isset($_SESSION['fetched_user']) || !$_SESSION['fetched_user']) {
+    header("Location: kill.php");
+    exit;
+}
+
+$arkesel_api_key = $_ENV['ARKESEL_API_KEY'];
+$sender = $_ENV['ARKESEL_API_SENDER_ID'];
+$urli = $_ENV['SMS_API_URL'];
 
 header('Content-Type: application/json');
 
@@ -13,9 +25,8 @@ if (isset($_SESSION['phone'])) {
     $_SESSION['otp'] = $otp;
 
     $message = "Your OTP for the Safety Awards voting is: $otp";
-    $sender = 'YOUR__SMS_SENDER_ID';
-
-    $url = "https://sms.arkesel.com/sms/api?action=send-sms";
+    
+    $url = "$urli";
     $url .= '&api_key=' . urlencode($arkesel_api_key);
     $url .= '&to=' . urlencode($phoneNumber);
     $url .= '&from=' . urlencode($sender);
@@ -38,6 +49,7 @@ if (isset($_SESSION['phone'])) {
     $result = json_decode($response, true);
 
     if (isset($result['code']) && $result['code'] === 'ok') {
+        $_SESSION['sent_otp'] = true;
         echo json_encode(['status' => 'success', 'otp_sent' => true]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Failed to send OTP']);

@@ -1,0 +1,14 @@
+{
+    "name": "valco/evoting",
+    "description": "E-voting for safety milestone awards",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ICT team"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
