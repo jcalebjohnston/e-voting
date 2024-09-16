@@ -13,7 +13,7 @@ if (isset($_POST['badgeNumber'])) {
     $stmt = $pdo->prepare("SELECT * FROM votes WHERE badge_number = :badge_number");
     $stmt->execute(['badge_number' => $badgeNumber]);
     if ($stmt->rowCount() > 0) {
-        echo json_encode(['status' => 'error', 'message' => 'You have already voted!']);
+        echo json_encode(['status' => 'error', 'message' => 'You have already voted!', 'alreadyVoted' => 'true']);
         exit;
     }
 

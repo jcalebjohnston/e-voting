@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['fetched_user']) || !$_SESSION['fetched_user'] || !isset($_SESSION['sent_otp']) || !$_SESSION['sent_otp'] || !isset($_SESSION['otp_verified']) || !$_SESSION['otp_verified'] || !isset($_SESSION['vote_submitted']) || !$_SESSION['vote_submitted']) {
-    header("Location: kill.php");
-    exit;
-}
+// if (!isset($_SESSION['fetched_user']) || !$_SESSION['fetched_user'] || !isset($_SESSION['sent_otp']) || !$_SESSION['sent_otp'] || !isset($_SESSION['otp_verified']) || !$_SESSION['otp_verified'] || !isset($_SESSION['vote_submitted']) || !$_SESSION['vote_submitted']) {
+//     header("Location: kill.php");
+//     exit;
+// }
 
 // $safety_section = $_SESSION['safety_section'];
 

@@ -15,7 +15,11 @@
 <body>
     <div class="container mt-5">
 
-    
+        <div class="d-flex flex-column justify-content-between h-100 p-3 p-md-4 p-xl-5">
+            <h3 class="m-0" style="text-align:center;">Safety Milestone Awards</h3>
+            <img class="img-fluid rounded mx-auto my-4" loading="lazy" src="./assets/images/logo/logo.png" width="80"
+                height="50" alt="VALCO Logo">
+        </div>
 
         <div id="page1" class="page">
             <h2 class="mb-4 text-center">Enter Badge Number</h2>
@@ -23,8 +27,7 @@
                 <div class="mb-3">
                     <label for="badgeNumber" class="form-label">Badge Number:</label>
                     <input type="text" id="badgeNumber" class="form-control" maxlength="6" required pattern="^0\d{5}$"
-                        placeholder="Enter your 6-digit badge number">
-                    <div class="form-text">Badge number should start with '0' and be 6 digits long.</div>
+                        placeholder="Enter your badge number">
                 </div>
                 <div id="userDetails" class="hidden">
                     <div class="mb-3">
@@ -120,6 +123,12 @@
             <canvas id="resultsChart" width="400" height="400"></canvas>
             <button type="button" id="finishBtn" class="btn btn-danger w-100 mt-4">Finish</button>
         </div>
+
+        <footer>
+            <div class="text-center text-md-start">
+                &copy; Volta Aluminium Company - 2024. All Rights Reserved.
+            </div>
+        </footer>
 
         <div id="loader" class="loader-container">
             <div class="loader"></div>

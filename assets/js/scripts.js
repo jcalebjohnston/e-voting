@@ -33,13 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById('department').value = data.user.department;
                         document.getElementById('phone').value = data.user.phone;
                         userDetails.classList.remove('hidden');
+                    } else if (data.alreadyVoted === 'true') {
+                        Swal.fire('Notice', 'You have already voted.', 'info').then(() => {
+                            page1.classList.remove('active');
+                            page4.classList.add('active');
+                            loadChart();
+                        });
                     } else {
                         Swal.fire('Error', data.message, 'error');
                     }
                 })
                 .catch(error => console.error('Error:', error));
         } else {
-            Swal.fire('Error', 'Invalid badge number format. Must start with 0 and be 6 digits long.', 'error');
+            Swal.fire('Error', 'Invalid badge number format.', 'error');
         }
     });
 
@@ -152,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function loadChart() {
-        fetch('helpers/get_results.php') // Fetch vote counts from backend
+        fetch('helpers/get_results.php')
             .then(response => response.json())
             .then(data => {
                 const resultsData = {
                     labels: ['Melcom', 'Non-stick Pans', 'China Mall', 'Ice Chest'],
                     datasets: [{
-                        data: [data.award1, data.award2, data.award3, data.award4], // Dynamic vote counts
+                        data: [data.award1, data.award2, data.award3, data.award4],
                         backgroundColor: ['#f20505', '#0529f2', '#0a820a', '#a65e16'],
                     }]
                 };
@@ -182,7 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Handle finish button
     const finishBtn = document.getElementById('finishBtn');
     finishBtn.addEventListener('click', () => {
         window.location.href = 'helpers/kill.php';
